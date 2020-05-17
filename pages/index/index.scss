@@ -1,0 +1,32 @@
+.index{
+	background-color: #f2f2f2;
+	padding-bottom: 30px;
+	.summary{
+		height: 130px;
+		background-color: #ccc;
+	}
+	.home-module-1{
+		margin: 30px auto;
+		display: flex;
+		justify-content: space-between;
+		.investor{
+			height: 436px;
+			width: 386px;
+			background-color: #fff;
+			&:first-child{
+				width: 268px;
+			}
+		}
+	}
+}
+
+.index :global(.ant-carousel .slick-slide) {
+	text-align: center;
+	height: 400px;
+	line-height: 400px;
+	background: #364d79;
+	overflow: hidden;
+	h3{
+		color: #fff;
+	}
+}
