@@ -12,6 +12,7 @@ module.exports = withCSS(withSass({
     webpack: config => {
         config.resolve.alias = {
             ...config.resolve.alias,
+            "@": path.resolve(__dirname, "./"),
             "@component": path.resolve(__dirname, "./component"),
             "@pages": path.join(__dirname, ".", "pages"),
             "@layouts": path.join(__dirname, ".", "layouts"),

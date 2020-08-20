@@ -29,7 +29,7 @@ const util = {
      * 获取url上的参数
      * @param field url键名
      */
-    getParams(field:string):string|object {
+    getParams(field:string):string|Object {
         let url = window.location.href,
             param = {},
             splitArray = url.split("?"),
@@ -62,7 +62,7 @@ const util = {
      * 将字符串转为对象
      * @param {string} str 
      */
-    parseToObj(str:string):object{
+    parseToObj(str:string):Object{
         let strArr = str.split(';');
         let obj = {};
         strArr.forEach(item => {
