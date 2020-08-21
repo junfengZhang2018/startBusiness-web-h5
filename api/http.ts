@@ -1,7 +1,5 @@
 import axios from "axios";
 import config from "@/config/url";
-import React, { Component } from "react";
-import ReactDOM from "react-dom";
 import { message } from "antd";
 import Loading from "@component/loading";
 /**

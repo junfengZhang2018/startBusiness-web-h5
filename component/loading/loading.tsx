@@ -24,7 +24,7 @@ Loading.newInstance = function newNotificationInstance(properties) {
     let div = document.createElement('div');
     document.body.appendChild(div);
     document.body.setAttribute('style', 'overflow: hidden');
-    let notification = ReactDOM.render(React.createElement(Loading, props), div);
+    ReactDOM.render(React.createElement(Loading, props), div);
     return {
         destroy() {
             ReactDOM.unmountComponentAtNode(div);

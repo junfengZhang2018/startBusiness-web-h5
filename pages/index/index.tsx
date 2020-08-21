@@ -1,47 +1,44 @@
 import React, { Component } from "react";
 import Link from "next/link";
 import Router from "next/router";
-import MyLayout from "@layouts/myLayout";
 import Head from "next/head";
-import { Button, Carousel } from "antd";
+import { message, Carousel } from "antd";
 import { connect } from "react-redux";
-import api from "@/api"
+import * as api from "@/server/interface";
 import "./index.scss";
 
 
-interface UserInterface {
-    name: string;
-    id?: number;
-}
+// interface UserInterface {
+//     name: string;
+//     id?: number;
+// }
 
-class User implements UserInterface {
-    constructor(public name: string, public id?: number) {}
-    sayHello(): string {
-        console.log("Hello");
-        return "Hello";
-    }
-}
-const list: Array<User> = [
-    // {name: '小王', id: 1},
-    // {name: '小张', id: 2},
-    // {name: '小李', id: 3}
-    new User("小黑"),
-    new User("小张", 2),
-    new User("小李", 3),
-];
+// class User implements UserInterface {
+//     constructor(public name: string, public id?: number) {}
+//     sayHello(): string {
+//         console.log("Hello");
+//         return "Hello";
+//     }
+// }
+// const list: Array<User> = [
+//     new User("小黑"),
+//     new User("小张", 2),
+//     new User("小李", 3),
+// ];
 
 class Home extends Component {
-    static getInitialProps(obj){
-        // api.projectList().then(res => {
+    static getInitialProps(ctx){
+        // api.getProjectList().then(res => {
         //     console.log(res)
+        // }, err =>{
+        //     console.log(err)
         // })
-        fetch("http://gu.free.idcfengye.com/cys/project/list", {
-            method: 'POST'
-        }).then(res => {
-            return res.json()
-        }).then(res => {
-            console.log(res)
-        })
+        // ctx.$http.request('/cys/project/list').then(res => {
+        //         console.log(res)
+        //     }, err =>{
+        //             console.log(err)
+        //         })
+        console.log(ctx)
         return {}
     }
     componentDidMount(){
