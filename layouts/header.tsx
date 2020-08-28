@@ -8,6 +8,8 @@ import { ShoppingCartOutlined } from "@ant-design/icons";
 // 和dispatch注册到当前head组件中来，但是由于head只需要触发事件，所有不需要store中state
 import { connect } from "react-redux";
 import { changeColor } from '@/store/home/action';
+import api from '@/api'
+import Cookies from 'js-cookie'
 
 class Header extends React.Component {
     render() {
@@ -53,7 +55,7 @@ class Header extends React.Component {
                                 红色
                             </a>
                             {/* <!-- 未登录 -->*/}
-                            <a href="#">登录 </a> <span> |</span>{" "}
+                            <a onClick={() => {this.login()}}>登录 </a> <span> |</span>{" "}
                             <a href="#"> 注册</a>
                             {/* <!-- 登录 --> */}
                             {/* <a href="#" ><Icon type="bell" theme="twoTone" />个人中心</a>
@@ -63,6 +65,15 @@ class Header extends React.Component {
                 </header>
             </React.Fragment>
         );
+    }
+
+    login(){
+        api.login({
+            telephone: '13631550213',
+            code: '666666'
+        }).then(res => {
+            Cookies.set('token', res.token);
+        })
     }
 }
 

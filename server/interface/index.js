@@ -1,5 +1,5 @@
-import http from './fetchHttp'
+// import http from './fetchHttp'
 
-export const getProjectList = (data) => {
-    return http.request('/cys/project/list', data)
-}
+// export const getProjectList = (data) => {
+//     return http.request('/cys/project/list', data)
+// }

@@ -1,6 +1,6 @@
 import Loading from './loading';
 
-let loadingInstance = 0;
+let loadingInstance = null;
 let getLoadingInstance = (tip) => {
     loadingInstance = loadingInstance || Loading.newInstance({
         tip,

@@ -4,7 +4,8 @@ import Router from "next/router";
 import Head from "next/head";
 import { message, Carousel } from "antd";
 import { connect } from "react-redux";
-import * as api from "@/server/interface";
+// import * as api from "@/server/interface";
+import api from "@/api";
 import "./index.scss";
 
 
@@ -28,21 +29,16 @@ import "./index.scss";
 
 class Home extends Component {
     static getInitialProps(ctx){
-        // api.getProjectList().then(res => {
-        //     console.log(res)
-        // }, err =>{
-        //     console.log(err)
-        // })
-        // ctx.$http.request('/cys/project/list').then(res => {
-        //         console.log(res)
-        //     }, err =>{
-        //             console.log(err)
-        //         })
+        
+        api.projectList().then(res => {
+            console.log(res)
+        }, err =>{
+            console.log(err)
+        })
         console.log(ctx)
         return {}
     }
     componentDidMount(){
-        
     }
     render(){
         return (

@@ -5,6 +5,8 @@ import { Spin } from 'antd';
 import './loading.scss';
 
 export default class Loading extends Component {
+    static propTypes: { tip: PropTypes.Requireable<string>; };
+    static newInstance: (properties: any) => { destroy(): void; };
     render() {
         let { tip } = this.props;
         return (

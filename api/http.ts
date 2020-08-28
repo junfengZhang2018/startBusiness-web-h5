@@ -18,8 +18,9 @@ import Loading from "@component/loading";
  */
 
 class Http {
-    request(url, data, loading) {
-        if (loading) Loading.open();
+    request(url: string, data: object, loading: boolean) {
+        const ifClient = process.browser;
+        ifClient && loading && Loading.open();
         return new Promise((resolve, reject) => {
             let _option = {
                 method: "POST",
@@ -51,11 +52,11 @@ class Http {
                             );
                         } else {
                             reject(Data);
-                            message.error(Data.msg);
+                            ifClient && message.error(Data.msg);
                         }
                     },
                     (error) => {
-                        message.error(error.message);
+                        ifClient && message.error(error.message);
                         if (error.response) {
                             reject(error.response.data);
                         } else {
@@ -64,7 +65,7 @@ class Http {
                     }
                 )
                 .finally(() => {
-                    Loading.close();
+                    ifClient && loading && Loading.close();
                 });
         });
     }

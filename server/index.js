@@ -9,6 +9,10 @@ app.prepare()
     .then(() => {
         const server = express()
 
+        server.use(function (req, res, next) {/*表示匹配任何路由*/
+            console.log(req.headers.cookie)
+            next()/*表示匹配完成这个中间件就继续往下执行。*/
+        })
         server.get('/', (req, res) => {
             return app.render(req, res, '/index')
         })
