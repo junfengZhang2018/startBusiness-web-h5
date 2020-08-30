@@ -28,16 +28,18 @@ import "./index.scss";
 // ];
 
 class Home extends Component {
-    static getInitialProps(ctx){
+    // static getInitialProps(ctx){
         
-        api.projectList().then(res => {
-            console.log(res)
-        }, err =>{
-            console.log(err)
-        })
-        console.log(ctx)
-        return {}
-    }
+    //     api.projectList({
+
+    //     }).then(res => {
+    //         console.log(res)
+    //     }, err =>{
+    //         console.log(err)
+    //     })
+    //     console.log(ctx)
+    //     return {}
+    // }
     componentDidMount(){
     }
     render(){

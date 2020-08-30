@@ -2,6 +2,8 @@ import axios from "axios";
 import config from "@/config/url";
 import { message } from "antd";
 import Loading from "@component/loading";
+import helper from "@utils/helper";
+import Router from "next/router";
 /**
  * 主要params参数
  * @params method {string} 方法名
@@ -34,25 +36,24 @@ class Http {
                     return status >= 200 && status < 300;
                 },
             };
+            ifClient && (_option.headers['x-auth-token'] = helper.getLocal('x-auth-token') && helper.getLocal('x-auth-token'));
 
             axios
                 .request(_option)
                 .then(
                     (res) => {
                         const Data = res.data;
-                        if (
-                            Data.errorCode == 0 ||
-                            Data.code == 0 ||
-                            Data.errCode == 0
-                        ) {
+                        if (Data.code == 0 || Data.errCode == 0) {
                             resolve(
                                 typeof Data === "object"
-                                    ? Data
+                                    ? Data.datas
                                     : JSON.parse(Data)
                             );
+                        } else if (Data.code == 10 || Data.errCode == 10) {
+                            Router.push("/account/login");
                         } else {
                             reject(Data);
-                            ifClient && message.error(Data.msg);
+                            ifClient && message.error(Data.msg || Data.errMsg);
                         }
                     },
                     (error) => {

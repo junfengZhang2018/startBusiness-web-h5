@@ -10,6 +10,7 @@ import { connect } from "react-redux";
 import { changeColor } from '@/store/home/action';
 import api from '@/api'
 import Cookies from 'js-cookie'
+import Router from "next/router";
 
 class Header extends React.Component {
     render() {
@@ -55,7 +56,7 @@ class Header extends React.Component {
                                 红色
                             </a>
                             {/* <!-- 未登录 -->*/}
-                            <a onClick={() => {this.login()}}>登录 </a> <span> |</span>{" "}
+                            <a onClick={() => {Router.push('/account/login')}}>登录 </a> <span> |</span>{" "}
                             <a href="#"> 注册</a>
                             {/* <!-- 登录 --> */}
                             {/* <a href="#" ><Icon type="bell" theme="twoTone" />个人中心</a>
@@ -65,15 +66,6 @@ class Header extends React.Component {
                 </header>
             </React.Fragment>
         );
-    }
-
-    login(){
-        api.login({
-            telephone: '13631550213',
-            code: '666666'
-        }).then(res => {
-            Cookies.set('token', res.token);
-        })
     }
 }
 

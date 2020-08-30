@@ -1,5 +1,5 @@
 const helper = {
-    setLocal($key:string, $value:any, $expire) {
+    setLocal($key:string, $value:any, $expire?) {
         var object = {
             value: $value,
             timestamp:
