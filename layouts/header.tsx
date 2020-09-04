@@ -12,7 +12,7 @@ import api from '@/api'
 import Cookies from 'js-cookie'
 import Router from "next/router";
 
-class Header extends React.Component {
+class Header extends React.Component<any> {
     render() {
         return (
             <React.Fragment>

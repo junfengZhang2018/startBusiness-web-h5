@@ -4,7 +4,10 @@ import ReactDOM from 'react-dom';
 import { Spin } from 'antd';
 import './loading.scss';
 
-export default class Loading extends Component {
+type propType = {
+    tip: string
+}
+export default class Loading extends Component<propType> {
     static propTypes: { tip: PropTypes.Requireable<string>; };
     static newInstance: (properties: any) => { destroy(): void; };
     render() {

@@ -1,6 +1,6 @@
 // 全局布局组件
 import React from "react";
-import App, { Container } from "next/app";
+import App from "next/app";
 import MyLayout from "../layouts/myLayout";
 // redux
 import { initStore } from "../store/index";
@@ -9,7 +9,7 @@ import { Provider } from "react-redux";
 // style
 import "antd/dist/antd.css";
 
-class MyApp extends App {
+class MyApp extends App<any> {
     // 获取到子组件中的prpos对象
     static async getInitialProps({ Component, router, ctx }) {
         let pageProps = {};
@@ -25,7 +25,7 @@ class MyApp extends App {
         const { Component, store, ...pageProps } = this.props;
 
         return (
-            <Container>
+            <React.Fragment>
                 <style jsx global>
                     {`
                         #__next {
@@ -37,7 +37,7 @@ class MyApp extends App {
                 <Provider store={store}>
                     <MyLayout Component={Component} {...pageProps} />
                 </Provider>
-            </Container>
+            </React.Fragment>
         );
     }
 }

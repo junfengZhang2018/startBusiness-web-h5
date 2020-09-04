@@ -1,7 +1,7 @@
 import React from 'react'
 import Header from './header'
 
-export default class myLayout extends React.Component {
+export default class myLayout extends React.Component<any> {
     render() {
         // 接收_app.js中传入的component和pageProps这两个对象
         const { Component, ...pageProps } = this.props

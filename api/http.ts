@@ -2,7 +2,7 @@ import axios from "axios";
 import config from "@/config/url";
 import { message } from "antd";
 import Loading from "@component/loading";
-import helper from "@utils/helper";
+import util from "@utils";
 import Router from "next/router";
 /**
  * 主要params参数
@@ -36,7 +36,7 @@ class Http {
                     return status >= 200 && status < 300;
                 },
             };
-            ifClient && (_option.headers['x-auth-token'] = helper.getLocal('x-auth-token') && helper.getLocal('x-auth-token'));
+            ifClient && (_option.headers['x-auth-token'] = util.getLocal('x-auth-token') && util.getLocal('x-auth-token'));
 
             axios
                 .request(_option)

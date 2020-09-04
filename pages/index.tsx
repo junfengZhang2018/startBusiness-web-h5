@@ -27,7 +27,7 @@ import "./index.scss";
 //     new User("小李", 3),
 // ];
 
-class Home extends Component {
+class Home extends Component<any> {
     // static getInitialProps(ctx){
         
     //     api.projectList({

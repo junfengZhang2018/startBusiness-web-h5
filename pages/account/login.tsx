@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Router from "next/router"
 import api from "@/api";
-import helper from "@utils/helper";
+import util from "@utils";
 
 // 导入antd这个ui组件中的  Tabs, Icon,Form,, Input, Button
 import { Form, Input, Button, Tabs, Row, Col, message } from "antd";
@@ -44,7 +44,7 @@ class Login extends Component {
                     //     });
                     // }
                     console.log(res)
-                    helper.setLocal('x-auth-token', res.token);
+                    util.setLocal('x-auth-token', res.token);
                     message.success('登陆成功!', 1, () => {
                         Router.push("/");
                     });
