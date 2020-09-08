@@ -1,0 +1,46 @@
+.project{
+    background-color: #f2f2f2;
+    padding-top: 20px;
+    .publish{
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 20px;
+    }
+    .projectList{
+        background-color: #fff;
+        li{
+            padding: 15px;
+            border-bottom: 1px solid #ccc;
+            position: relative;
+            p{
+                font-size: 12px;
+                margin: 0;
+                >span{
+                    display: inline-block;
+                    width: 180px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    &.content{
+                        width: 400px;
+                    }
+                    .hot{
+                        color:#e93e28;
+                        font-size: 18px;
+                    }
+                }
+            }
+            .deliver{
+                position: absolute;
+                top: 50%;
+                transform: translateX(-50%);
+                right: 20px;
+            }
+        }
+    }
+    .page{
+        display: flex;
+        justify-content: flex-end;
+        padding-bottom: 20px;
+    }
+}

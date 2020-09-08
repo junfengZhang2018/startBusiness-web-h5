@@ -6,6 +6,9 @@ import MyLayout from "../layouts/myLayout";
 import { initStore } from "../store/index";
 import withRedux from "next-redux-wrapper";
 import { Provider } from "react-redux";
+// antd中文
+import { ConfigProvider } from 'antd';
+import zhCN from 'antd/lib/locale/zh_CN';
 // style
 import "antd/dist/antd.css";
 
@@ -30,12 +33,17 @@ class MyApp extends App<any> {
                     {`
                         #__next {
                             height: 100%;
+                            >div{
+                                min-width: 1300px;
+                            }
                         }
                     `}
                 </style>
                 {/* 改造成利用Layout组件替换此处的Component,将Component组件提取到layout组件中进行执行 */}
                 <Provider store={store}>
-                    <MyLayout Component={Component} {...pageProps} />
+                    <ConfigProvider locale={zhCN}>
+                        <MyLayout Component={Component} {...pageProps} />
+                    </ConfigProvider>
                 </Provider>
             </React.Fragment>
         );

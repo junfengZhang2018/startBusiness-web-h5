@@ -152,10 +152,10 @@ class Login extends Component {
                 </Row>
                 <style>
                     {`
-            .ant-form-item{
-                margin:10px 10px;
-            }
-            `}
+                        .ant-form-item{
+                            margin: 10px 10px;
+                        }
+                    `}
                 </style>
             </div>
         );
