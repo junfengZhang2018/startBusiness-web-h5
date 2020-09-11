@@ -19,57 +19,57 @@ import Router from "next/router";
  * 注意：params中的数据会覆盖method url 参数，所以如果指定了这2个参数则不需要在params中带入
  */
 
-class Http {
-    request(url: string, data: object, loading: boolean) {
-        const ifClient = process.browser;
-        ifClient && loading && Loading.open();
-        return new Promise((resolve, reject) => {
-            let _option = {
-                method: "POST",
-                url,
-                baseURL: config.baseURL,
-                timeout: 30000,
-                data,
-                headers: { "Content-Type": "application/json;charset=UTF-8" },
-                withCredentials: true, //是否携带cookies发起请求
-                validateStatus: (status) => {
-                    return status >= 200 && status < 300;
-                },
-            };
-            ifClient && (_option.headers['x-auth-token'] = util.getLocal('x-auth-token') && util.getLocal('x-auth-token'));
+export const instance = axios.create({
+    baseURL: config.baseURL,
+    timeout: 30000,
+    withCredentials: true, //是否携带cookies发起请求
+})
 
-            axios
-                .request(_option)
-                .then(
-                    (res) => {
-                        const Data = res.data;
-                        if (Data.code == 0 || Data.errCode == 0) {
-                            resolve(
-                                typeof Data === "object"
-                                    ? Data.datas
-                                    : JSON.parse(Data)
-                            );
-                        } else if (Data.code == 10 || Data.errCode == 10) {
-                            Router.push("/account/login");
-                        } else {
-                            reject(Data);
-                            ifClient && message.error(Data.msg || Data.errMsg);
-                        }
-                    },
-                    (error) => {
-                        ifClient && message.error(error.message);
-                        if (error.response) {
-                            reject(error.response.data);
-                        } else {
-                            reject(error);
-                        }
+// class Http {
+export const http = (url: string, data: object, loading: boolean) => {
+    const ifClient = process.browser;
+    ifClient && loading && Loading.open();
+    return new Promise((resolve, reject) => {
+        let _option = {
+            method: "POST",
+            url,
+            data,
+            headers: { "Content-Type": "application/json;charset=UTF-8" },
+            validateStatus: (status) => {
+                return status >= 200 && status < 300;
+            },
+        };
+        // ifClient && (_option.headers['x-auth-token'] = util.getLocal('x-auth-token'));
+        instance
+            .request(_option)
+            .then(
+                (res) => {
+                    const Data = res.data;
+                    if (Data.code == 0 || Data.errCode == 0) {
+                        resolve(
+                            typeof Data === "object"
+                                ? Data.datas
+                                : JSON.parse(Data)
+                        );
+                    } else if (Data.code == 10 || Data.errCode == 10) {
+                        Router.push("/account/login");
+                    } else {
+                        reject(Data);
+                        ifClient && message.error(Data.msg || Data.errMsg);
                     }
-                )
-                .finally(() => {
-                    ifClient && loading && Loading.close();
-                });
-        });
-    }
+                },
+                (error) => {
+                    ifClient && message.error(error.message);
+                    if (error.response) {
+                        reject(error.response.data);
+                    } else {
+                        reject(error);
+                    }
+                }
+            )
+            .finally(() => {
+                ifClient && loading && Loading.close();
+            });
+    });
 }
-
-export default new Http();
+// }

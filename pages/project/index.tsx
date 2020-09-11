@@ -11,7 +11,7 @@ class Project extends Component<any> {
     formRef = React.createRef();
     state = {
         loading: false,
-        visible: true,
+        visible: false,
     };
     showModal = () => {
         this.setState({
@@ -38,7 +38,7 @@ class Project extends Component<any> {
     };
 
     static async getInitialProps(ctx) {
-        let projectList: any = await api.projectList({
+        let { list, pageInfo }:any = await api.projectList({
             cityId: 0,
             content: "",
             industryId: 0,
@@ -47,15 +47,9 @@ class Project extends Component<any> {
             pageSize: 10,
             type: 0,
         });
-        // .then(res => {
-        //     console.log(res)
-
-        // }, err =>{
-        //     console.log(err)
-        // })
         return {
-            projectList: projectList.list,
-            pageInfo: projectList.pageInfo,
+            projectList: list,
+            pageInfo
         };
     }
     componentDidMount() {
@@ -84,7 +78,7 @@ class Project extends Component<any> {
                                     as={`/project/detail/${item.id}`}
                                     href={`/project/detail?id=${item.id}`}
                                 >
-                                    {item.title}
+                                    <a>{item.title}</a>
                                 </Link>
                                 <p>
                                     <span>
@@ -139,7 +133,7 @@ class Project extends Component<any> {
                             onCancel={this.handleCancel}
                             footer={[
                                 <Button key="back" onClick={this.handleCancel}>
-                                    Return
+                                    返回
                                 </Button>,
                                 <Button
                                     key="submit"
@@ -147,7 +141,7 @@ class Project extends Component<any> {
                                     loading={loading}
                                     onClick={this.handleOk}
                                 >
-                                    Submit
+                                    提交
                                 </Button>,
                             ]}
                         >

@@ -2,6 +2,8 @@
 import React from "react";
 import App from "next/app";
 import MyLayout from "../layouts/myLayout";
+import { instance } from "@/api/http"
+import Cookies from '@/utils/cookie'
 // redux
 import { initStore } from "../store/index";
 import withRedux from "next-redux-wrapper";
@@ -16,7 +18,24 @@ class MyApp extends App<any> {
     // 获取到子组件中的prpos对象
     static async getInitialProps({ Component, router, ctx }) {
         let pageProps = {};
-
+        // console.log(getcookiesInServer(ctx.req))
+        instance.interceptors.request.use(config => {
+            console.log(config)
+            if(ctx.isServer){
+                config.headers['x-auth-token'] = Cookies.getcookiesInServer(ctx.req).token || '';
+            }else{
+                config.headers['x-auth-token'] = Cookies.getcookiesInClient('token') || '';
+            }
+            
+            // if (store.state.token) {
+            //     // console.log('token存在') // 如果token存在那么每个请求头里面全部加上token
+            //     config.headers['Authorization'] = 'bearer ' + store.state.token
+            // }
+            console.log(config.headers['x-auth-token'])
+            return config
+        }, error => {
+            console.log(error) // for debug
+        })
         if (Component.getInitialProps) {
             pageProps = await Component.getInitialProps(ctx);
         }

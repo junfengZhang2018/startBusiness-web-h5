@@ -1,8 +1,8 @@
-import http from './http';
+import { http } from './http';
 
 const request = (api, loading = true) => {
     return (data = {}) => {
-        return http.request(api, data, loading);
+        return http(api, data, loading);
     };
 };
 

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Router from "next/router"
 import api from "@/api";
 import util from "@utils";
+import Cookies from 'js-cookie'
 
 // 导入antd这个ui组件中的  Tabs, Icon,Form,, Input, Button
 import { Form, Input, Button, Tabs, Row, Col, message } from "antd";
@@ -44,7 +45,8 @@ class Login extends Component {
                     //     });
                     // }
                     console.log(res)
-                    util.setLocal('x-auth-token', res.token);
+                    // util.setLocal('x-auth-token', res.token);
+                    Cookies.set('token', res.token);
                     message.success('登陆成功!', 1, () => {
                         Router.push("/");
                     });
@@ -53,7 +55,12 @@ class Login extends Component {
         }).catch(err => {
             console.log(err)
         });
-    };
+    }
+
+    logout(){
+        Cookies.remove('token')
+        message.success("注销成功")
+    }
 
     render() {
         //3.0 布局整个登录页面的样式
@@ -61,6 +68,7 @@ class Login extends Component {
             <div>
                 <Row>
                     <Col span="10" offset="7">
+                        <Button onClick={() => {this.logout()}}>注销</Button>
                         {/* 3.0.1 利用Tabs去做一个注册和登录的切换功能 */}
                         <Tabs defaultActiveKey="1">
                             <TabPane
