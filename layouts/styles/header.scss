@@ -17,6 +17,7 @@
 		a{
 			padding: 10px;
 			color:#000;
+			margin-left: 16px;
 		}
 	}
 	.input{
@@ -24,6 +25,7 @@
 		height: 34px;
 		border: 2px solid #00A4FF;
 		margin: 35px 30px 0 30px;
+		position: relative;
 		input{
 			width: 250px;
 			height: 30px;
@@ -31,7 +33,7 @@
 			line-height: 30px;
 			padding-left: 10px;
 		}
-		button{
+		.search{
 			width: 50px;
 			height: 30px;
 			line-height: 30px;
@@ -39,6 +41,8 @@
 			font-size: 15px;
 			border: 0;
 			background-color: #00A4FF;
+			position: absolute;
+			right: -1px;
 		}
 	}
 	.right{

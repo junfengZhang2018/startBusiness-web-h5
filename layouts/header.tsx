@@ -32,7 +32,7 @@ class Header extends React.Component<any> {
                             className="fl"
                             placeholder="输入查询关键字"
                         />
-                        <button className="fr">搜索</button>
+                        <button className="search">搜索</button>
                     </div>
                     <div className="right fr">
                         <div className="signin">
@@ -56,8 +56,9 @@ class Header extends React.Component<any> {
                                 红色
                             </a>
                             {/* <!-- 未登录 -->*/}
-                            <a onClick={() => {Router.push('/account/login')}}>登录 </a> <span> |</span>{" "}
-                            <a href="#"> 注册</a>
+                            <a onClick={() => {Router.push('/account/login')}}>登录 </a> 
+                            {/* <span> |</span>{" "}
+                            <a href="#"> 注册</a> */}
                             {/* <!-- 登录 --> */}
                             {/* <a href="#" ><Icon type="bell" theme="twoTone" />个人中心</a>
                             <a href="#" ><img src="/static/img/asset-myImg.jpg" alt="" />18665765432</a> */}
