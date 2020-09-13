@@ -1,9 +1,19 @@
 // 全局布局组件
-import React, { Component } from "react";
+import React, { Children, Component } from "react";
 import Link from "next/link";
+import Router from "next/router";
 import api from "@/api";
 import "./index.scss";
-import { Form, Input, Radio, Pagination, Button, Modal } from "antd";
+import {
+    Form,
+    Input,
+    Radio,
+    Pagination,
+    Button,
+    Modal,
+    Cascader,
+    message,
+} from "antd";
 import { EyeOutlined, PlusOutlined } from "@ant-design/icons";
 
 const FormItem = Form.Item;
@@ -12,6 +22,8 @@ class Project extends Component<any> {
     state = {
         loading: false,
         visible: false,
+        cityList: [],
+        industryList: [],
     };
     showModal = () => {
         this.setState({
@@ -19,16 +31,57 @@ class Project extends Component<any> {
         });
     };
 
-    handleOk = () => {
+    submit = () => {
         this.setState({ loading: true });
-        setTimeout(() => {
-            this.setState({ loading: false, visible: false });
-        }, 3000);
+        this.formRef.current
+            .validateFields()
+            .then((value) => {
+                api.saveProject({
+                    ...value,
+                    cityId:
+                        value.cityId && value.cityId[value.cityId.length - 1],
+                    industryId:
+                        value.industryId &&
+                        value.industryId[value.industryId.length - 1],
+                }).then(
+                    (res) => {
+                        message.success("发布成功");
+                        this.setState({ loading: false, visible: false });
+                        Router.push("/project");
+                    },
+                    (err) => {
+                        this.setState({ loading: false });
+                    }
+                );
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     };
 
     handleCancel = () => {
         this.setState({ visible: false });
     };
+
+    getCity = () => {
+        api.getCity({ pid: 0 }).then((res) => {
+            this.setState({
+                cityList: res.list.map((item) => {
+                    return {
+                        ...item,
+                        isLeaf: false,
+                    };
+                }),
+            });
+        });
+    };
+
+    getIndustry = () => {
+        api.getIndustry({ pid: 0 }).then((res) => {
+            this.setState({ industryList: res.list });
+        });
+    };
+
     initForm = () => {
         // console.log(this.formRef)
         // this.formRef.current.setFieldsValue({
@@ -37,8 +90,18 @@ class Project extends Component<any> {
         // console.log(this.formRef.current.getFieldValue())//这里能够获取到初始化挂载的值
     };
 
+    loadData = (selectedOptions) => {
+        const targetOption = selectedOptions[selectedOptions.length - 1];
+        targetOption.loading = true;
+        api.getCity({ pid: targetOption.id }).then((res) => {
+            targetOption.loading = false;
+            targetOption.children = res.list;
+            this.setState({ cityList: [...this.state.cityList] });
+        });
+    };
+
     static async getInitialProps(ctx) {
-        let { list, pageInfo }:any = await api.projectList({
+        let { list, pageInfo }: any = await api.projectList({
             cityId: 0,
             content: "",
             industryId: 0,
@@ -49,19 +112,34 @@ class Project extends Component<any> {
         });
         return {
             projectList: list,
-            pageInfo
+            pageInfo,
         };
     }
-    componentDidMount() {
+    componentWillMount() {
         // this.initForm();
-        // this.formRef.current.setFieldsValue({
-        //     projectType: 1
-        // })
+        this.getCity();
+        this.getIndustry();
     }
+
     render() {
         const { pageInfo, projectList } = this.props.pageProps;
         const { visible, loading } = this.state;
         const { TextArea } = Input;
+        const amount = [
+            { value: 1, label: "1-50万" },
+            { value: 2, label: "50-100万" },
+            { value: 3, label: "100-300万" },
+            { value: 4, label: "300-500万" },
+            { value: 5, label: "500-1000万" },
+            { value: 6, label: "1000-5000万" },
+            { value: 7, label: "5000万-一亿" },
+            { value: 8, label: "一亿以上" },
+        ];
+        const filter = (arr, value) => {
+            let current = arr.find((item) => item.value === value);
+            return current && current.label;
+        };
+
         return (
             <div className="project">
                 <div className="w">
@@ -84,13 +162,13 @@ class Project extends Component<any> {
                                     <span>
                                         投资资金：
                                         <span className="hot">
-                                            {item.money + "元"}
+                                            {filter(amount, item.money) + "元"}
                                         </span>
                                     </span>
                                 </p>
                                 <p>
-                                    <span>投资地区：{item.cityName}</span>
-                                    <span>投资行业：{item.industryName}</span>
+                                    {item.cityName?<span>投资地区：{item.cityName}</span>:''}
+                                    {item.industryName?<span>投资行业：{item.industryName}</span>:''}
                                 </p>
                                 <p>
                                     <span>发布用户：{item.userName}</span>
@@ -129,7 +207,7 @@ class Project extends Component<any> {
                             visible={visible}
                             title="项目发布"
                             width="60%"
-                            onOk={this.handleOk}
+                            onOk={this.submit}
                             onCancel={this.handleCancel}
                             footer={[
                                 <Button key="back" onClick={this.handleCancel}>
@@ -139,67 +217,90 @@ class Project extends Component<any> {
                                     key="submit"
                                     type="primary"
                                     loading={loading}
-                                    onClick={this.handleOk}
+                                    onClick={this.submit}
                                 >
                                     提交
                                 </Button>,
                             ]}
                         >
-
-                                <FormItem
-                                    label="合作标题"
-                                    name="title"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: "请输入合作标题!",
-                                        }
-                                    ]}
-                                >
-                                    <Input placeholder="请输入合作标题" />
-                                </FormItem>
-                                <FormItem
-                                    label="项目类型"
-                                    name="projectType"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: "请输入项目类型!",
-                                        }
-                                    ]}
-                                >
-                                    <Radio.Group>
-                                        <Radio value={1}>个人</Radio>
-                                        <Radio value={2}>公司</Radio>
-                                    </Radio.Group>
-                                </FormItem>
-                                <FormItem
-                                    label="投资金额"
-                                    name="money"
-                                >
-                                    <Radio.Group value={1}>
-                                        <Radio value={1}>1-50万</Radio>
-                                        <Radio value={2}>50-100万</Radio>
-                                        <Radio value={3}>100-300万</Radio>
-                                        <Radio value={4}>300-500万</Radio>
-                                        <Radio value={5}>500-1000</Radio>
-                                        <Radio value={6}>1000-5000万</Radio>
-                                        <Radio value={7}>5000-一亿</Radio>
-                                        <Radio value={8}>一亿以上</Radio>
-                                    </Radio.Group>
-                                </FormItem>
-                                <FormItem
-                                    label="项目详情"
-                                    name="content"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: "请输入项目详情!",
-                                        },
-                                    ]}
-                                >
-                                    <TextArea rows={3} placeholder="请输入项目详情" />
-                                </FormItem>
+                            <FormItem
+                                label="合作标题"
+                                name="title"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "请输入合作标题!",
+                                    },
+                                ]}
+                            >
+                                <Input placeholder="请输入合作标题" />
+                            </FormItem>
+                            <FormItem
+                                label="项目类型"
+                                name="projectType"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "请输入项目类型!",
+                                    },
+                                ]}
+                            >
+                                <Radio.Group>
+                                    <Radio value={1}>个人</Radio>
+                                    <Radio value={2}>公司</Radio>
+                                </Radio.Group>
+                            </FormItem>
+                            <FormItem label="城市" name="cityId">
+                                <Cascader
+                                    fieldNames={{ label: "name", value: "id" }}
+                                    options={this.state.cityList}
+                                    loadData={this.loadData}
+                                    changeOnSelect
+                                />
+                            </FormItem>
+                            <FormItem label="行业" name="industryId">
+                                <Cascader
+                                    fieldNames={{ label: "name", value: "id" }}
+                                    options={this.state.industryList}
+                                    changeOnSelect
+                                />
+                            </FormItem>
+                            <FormItem
+                                label="投资金额"
+                                name="money"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "请选择投资金额!",
+                                    }
+                                ]}
+                            >
+                                <Radio.Group>
+                                    {amount.map((item) => (
+                                        <Radio
+                                            key={item.value}
+                                            value={item.value}
+                                        >
+                                            {item.label}
+                                        </Radio>
+                                    ))}
+                                </Radio.Group>
+                            </FormItem>
+                            <FormItem
+                                label="项目详情"
+                                name="content"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "请输入项目详情!",
+                                    },
+                                ]}
+                            >
+                                <TextArea
+                                    rows={3}
+                                    placeholder="请输入项目详情"
+                                />
+                            </FormItem>
                         </Modal>
                     </Form>
                 </div>

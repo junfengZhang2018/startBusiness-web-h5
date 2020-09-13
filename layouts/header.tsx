@@ -1,19 +1,37 @@
 import React from "react";
 // import css from './styles/header.scss';
 import "./styles/header.scss";
-import { Badge } from "antd";
+import { Badge, Menu, Dropdown, message } from "antd";
 import Head from "next/head";
-import { ShoppingCartOutlined } from "@ant-design/icons";
+import util from "@utils";
+import { ShoppingCartOutlined, DownOutlined } from "@ant-design/icons";
 // redux步骤1：导入connect高阶函数(react-redux)，按需将store中的state
 // 和dispatch注册到当前head组件中来，但是由于head只需要触发事件，所有不需要store中state
 import { connect } from "react-redux";
-import { changeColor } from '@/store/home/action';
-import api from '@/api'
-import Cookies from 'js-cookie'
+import { changeColor } from "@/store/home/action";
+import Cookies from "js-cookie";
 import Router from "next/router";
 
+const menu = (
+    <Menu>
+        <Menu.Item>
+            <p onClick={() => {logout()}} style={{marginBottom: 0, textAlign: 'center'}}>注销</p>
+        </Menu.Item>
+    </Menu>
+);
+
+const logout = () => {
+    Cookies.remove('token');
+    util.removeLocal('x-auth-token');
+    message.success("注销成功");
+}
+
 class Header extends React.Component<any> {
+    state = {
+        a: 0
+    }
     render() {
+        const token = util.getLocal('x-auth-token');
         return (
             <React.Fragment>
                 <div className="grey_bg"></div>
@@ -38,7 +56,6 @@ class Header extends React.Component<any> {
                         <div className="signin">
                             <Badge count={5}>
                                 {/* 加入antd中的购物车图标 */}
-                                {/* <Icon type="shopping-cart" className={css.Icon} /> */}
                                 <ShoppingCartOutlined />
                             </Badge>
                             <a
@@ -56,7 +73,26 @@ class Header extends React.Component<any> {
                                 红色
                             </a>
                             {/* <!-- 未登录 -->*/}
-                            <a onClick={() => {Router.push('/account/login')}}>登录 </a> 
+                            {this.state.a == 1 ? (
+                                <Dropdown overlay={menu}>
+                                    <a
+                                        onClick={() => {
+                                            Router.push("");
+                                        }}
+                                    >
+                                        13631550213<DownOutlined />
+                                    </a>
+                                </Dropdown>
+                            ) : (
+                                <a
+                                    onClick={() => {
+                                        Router.push("/account/login");
+                                    }}
+                                >
+                                    登录
+                                </a>
+                            )}
+
                             {/* <span> |</span>{" "}
                             <a href="#"> 注册</a> */}
                             {/* <!-- 登录 --> */}
@@ -79,4 +115,4 @@ class Header extends React.Component<any> {
 //     };
 // };
 
-export default connect(null, {changeColor})(Header);
+export default connect(null, { changeColor })(Header);

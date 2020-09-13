@@ -18,7 +18,7 @@ import Router from "next/router";
  * 其他更多拓展参看axios文档后 自行拓展
  * 注意：params中的数据会覆盖method url 参数，所以如果指定了这2个参数则不需要在params中带入
  */
-
+const loginErrCode = [402, 403];
 export const instance = axios.create({
     baseURL: config.baseURL,
     timeout: 30000,
@@ -39,19 +39,19 @@ export const http = (url: string, data: object, loading: boolean) => {
                 return status >= 200 && status < 300;
             },
         };
-        // ifClient && (_option.headers['x-auth-token'] = util.getLocal('x-auth-token'));
+        ifClient && (_option.headers['x-auth-token'] = util.getLocal('x-auth-token'));
         instance
             .request(_option)
             .then(
                 (res) => {
                     const Data = res.data;
-                    if (Data.code == 0 || Data.errCode == 0) {
+                    if (Data.code == 0) {
                         resolve(
                             typeof Data === "object"
                                 ? Data.datas
                                 : JSON.parse(Data)
                         );
-                    } else if (Data.code == 10 || Data.errCode == 10) {
+                    } else if (loginErrCode.includes(Data.code)) {
                         Router.push("/account/login");
                     } else {
                         reject(Data);

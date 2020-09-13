@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Router from "next/router"
 import api from "@/api";
-// import util from "@utils";
+import util from "@utils";
 import regexList from "@/utils/regexList";
 import Cookies from 'js-cookie'
 
@@ -26,27 +26,20 @@ class Login extends Component {
     // 负责执行登录请求的
     login(){
         this.formRef.current.validateFields().then(value => {
-            // if (!err) {
-                console.log("Received values of form: ", value);
-                // 将values数据通过post请求，发送给/nc/common/account/login
-                api.login(value).then(res => {
-                    console.log(res)
-                    // util.setLocal('x-auth-token', res.token);
-                    Cookies.set('token', res.token);
-                    message.success('登录成功!', 1, () => {
-                        Router.push("/");
-                    });
+            console.log("Received values of form: ", value);
+            // 将values数据通过post请求，发送给/nc/common/account/login
+            api.login(value).then(res => {
+                util.setLocal('x-auth-token', res.token);
+                Cookies.set('token', res.token);
+                message.success('登录成功!', 1, () => {
+                    Router.push("/");
                 });
-            // }
+            });
         }).catch(err => {
             console.log(err)
         });
     }
 
-    logout(){
-        Cookies.remove('token')
-        message.success("注销成功")
-    }
 
     render() {
         //3.0 布局整个登录页面的样式
@@ -54,7 +47,6 @@ class Login extends Component {
             <div>
                 <Row>
                     <Col span="10" offset="9">
-                        {/* <Button onClick={() => {this.logout()}}>注销</Button> */}
                         <Form
                             ref={this.formRef}
                             onFinish={() => {this.login()}}
@@ -97,6 +89,7 @@ class Login extends Component {
                                 ]}
                             >
                                 <Input
+                                    maxLength={6}
                                     prefix={
                                         <LockOutlined
                                             style={{
@@ -124,6 +117,9 @@ class Login extends Component {
                     {`
                         .ant-form-item{
                             margin: 10px 10px;
+                        }
+                        .ant-form-item-control-input-content{
+                            text-align: center;
                         }
                     `}
                 </style>
