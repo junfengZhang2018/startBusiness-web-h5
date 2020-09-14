@@ -3,7 +3,7 @@ import React from "react";
 import "./styles/header.scss";
 import { Badge, Menu, Dropdown, message } from "antd";
 import Head from "next/head";
-import util from "@utils";
+import util from "@/utils";
 import { ShoppingCartOutlined, DownOutlined } from "@ant-design/icons";
 // redux步骤1：导入connect高阶函数(react-redux)，按需将store中的state
 // 和dispatch注册到当前head组件中来，但是由于head只需要触发事件，所有不需要store中state

@@ -2,7 +2,7 @@ import axios from "axios";
 import config from "@/config/url";
 import { message } from "antd";
 import Loading from "@component/loading";
-import util from "@utils";
+import util from "@/utils";
 import Router from "next/router";
 /**
  * 主要params参数
@@ -19,13 +19,13 @@ import Router from "next/router";
  * 注意：params中的数据会覆盖method url 参数，所以如果指定了这2个参数则不需要在params中带入
  */
 const loginErrCode = [402, 403];
+
 export const instance = axios.create({
     baseURL: config.baseURL,
     timeout: 30000,
     withCredentials: true, //是否携带cookies发起请求
 })
 
-// class Http {
 export const http = (url: string, data: object, loading: boolean) => {
     const ifClient = process.browser;
     ifClient && loading && Loading.open();
@@ -72,4 +72,3 @@ export const http = (url: string, data: object, loading: boolean) => {
             });
     });
 }
-// }

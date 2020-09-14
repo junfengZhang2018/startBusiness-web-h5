@@ -18,7 +18,7 @@ import { EyeOutlined, PlusOutlined } from "@ant-design/icons";
 
 const FormItem = Form.Item;
 class Project extends Component<any> {
-    formRef = React.createRef();
+    formRef = React.createRef<any>();
     state = {
         loading: false,
         visible: false,
@@ -39,10 +39,9 @@ class Project extends Component<any> {
                 api.saveProject({
                     ...value,
                     cityId:
-                        value.cityId && value.cityId[value.cityId.length - 1],
+                        value.cityId?.[value.cityId.length - 1],
                     industryId:
-                        value.industryId &&
-                        value.industryId[value.industryId.length - 1],
+                        value.industryId?.[value.industryId.length - 1],
                 }).then(
                     (res) => {
                         message.success("发布成功");
@@ -64,7 +63,7 @@ class Project extends Component<any> {
     };
 
     getCity = () => {
-        api.getCity({ pid: 0 }).then((res) => {
+        api.getCity({ pid: 0 }).then(res => {
             this.setState({
                 cityList: res.list.map((item) => {
                     return {
@@ -77,7 +76,7 @@ class Project extends Component<any> {
     };
 
     getIndustry = () => {
-        api.getIndustry({ pid: 0 }).then((res) => {
+        api.getIndustry({ pid: 0 }).then(res => {
             this.setState({ industryList: res.list });
         });
     };
@@ -137,7 +136,7 @@ class Project extends Component<any> {
         ];
         const filter = (arr, value) => {
             let current = arr.find((item) => item.value === value);
-            return current && current.label;
+            return current?.label;
         };
 
         return (

@@ -1,9 +1,11 @@
 import Cookie from "js-cookie";
-
+type Token = {
+    token?: string
+}
 export default {
     //获取服务端cookie
     getcookiesInServer: function (req) {
-        let service_cookie = {};
+        let service_cookie:Token = {};
         req &&
             req.headers.cookie &&
             req.headers.cookie.split(";").forEach(function (val) {

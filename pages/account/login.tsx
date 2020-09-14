@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Router from "next/router"
 import api from "@/api";
-import util from "@utils";
+import util from "@/utils";
 import regexList from "@/utils/regexList";
 import Cookies from 'js-cookie'
 
@@ -22,7 +22,7 @@ const FormItem = Form.Item;
 // import Register from '../../components/account/Register.js'
 
 class Login extends Component {
-    formRef = React.createRef();
+    formRef = React.createRef<any>();
     // 负责执行登录请求的
     login(){
         this.formRef.current.validateFields().then(value => {
