@@ -4,20 +4,16 @@ import Link from "next/link";
 import Router from "next/router";
 import api from "@/api";
 import "./index.scss";
-import {
-    Form,
-    Input,
-    Radio,
-    Pagination,
-    Button,
-    Modal,
-    Cascader,
-    message,
-} from "antd";
+import { Form, Input, Radio, Pagination, Button, Modal, Cascader, message } from "antd";
 import { EyeOutlined, PlusOutlined } from "@ant-design/icons";
 
 const FormItem = Form.Item;
 class Project extends Component<any> {
+    constructor(props){
+        super(props);
+        this.getCity();
+        this.getIndustry();
+    }
     formRef = React.createRef<any>();
     state = {
         loading: false,
@@ -116,8 +112,6 @@ class Project extends Component<any> {
     }
     componentWillMount() {
         // this.initForm();
-        this.getCity();
-        this.getIndustry();
     }
 
     render() {
@@ -132,7 +126,7 @@ class Project extends Component<any> {
             { value: 5, label: "500-1000万" },
             { value: 6, label: "1000-5000万" },
             { value: 7, label: "5000万-一亿" },
-            { value: 8, label: "一亿以上" },
+            { value: 8, label: "一亿以上" }
         ];
         const filter = (arr, value) => {
             let current = arr.find((item) => item.value === value);

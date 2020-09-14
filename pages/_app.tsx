@@ -8,11 +8,13 @@ import Cookies from '@/utils/cookie'
 import { initStore } from "../store/index";
 import withRedux from "next-redux-wrapper";
 import { Provider } from "react-redux";
+import { saveUserInfo } from "@/store/user/action";
 // antd中文
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/lib/locale/zh_CN';
 // style
 import "antd/dist/antd.css";
+import util from "@/utils";
 
 class MyApp extends App<any> {
     // 获取到子组件中的prpos对象
@@ -25,9 +27,9 @@ class MyApp extends App<any> {
             }else{
                 config.headers['x-auth-token'] = Cookies.getcookiesInClient('token') || '';
             }
-            return config
+            return config;
         }, error => {
-            console.log(error) // for debug
+            console.log(error); // for debug
         })
         if (Component.getInitialProps) {
             try{
@@ -39,7 +41,9 @@ class MyApp extends App<any> {
 
         return { pageProps };
     }
-    
+    componentDidMount(){
+        if(util.getLocal('userInfo')) this.props.store.dispatch(saveUserInfo(util.getLocal('userInfo')));
+    }
     render() {
         const { Component, store, ...pageProps } = this.props;
 

@@ -1,5 +1,4 @@
 import React from "react";
-// import css from './styles/header.scss';
 import "./styles/header.scss";
 import { Badge, Menu, Dropdown, message } from "antd";
 import Head from "next/head";
@@ -9,29 +8,28 @@ import { ShoppingCartOutlined, DownOutlined } from "@ant-design/icons";
 // 和dispatch注册到当前head组件中来，但是由于head只需要触发事件，所有不需要store中state
 import { connect } from "react-redux";
 import { changeColor } from "@/store/home/action";
+import { clearUserInfo } from "@/store/user/action";
 import Cookies from "js-cookie";
 import Router from "next/router";
 
-const menu = (
+const menu = (props) => (
     <Menu>
         <Menu.Item>
-            <p onClick={() => {logout()}} style={{marginBottom: 0, textAlign: 'center'}}>注销</p>
+            <p onClick={() => {props.logout()}} style={{marginBottom: 0, textAlign: 'center'}}>注销</p>
         </Menu.Item>
     </Menu>
 );
 
-const logout = () => {
-    Cookies.remove('token');
-    util.removeLocal('x-auth-token');
-    message.success("注销成功");
-}
-
 class Header extends React.Component<any> {
-    state = {
-        a: 0
+    logout = () => {
+        Cookies.remove('token');
+        util.removeLocal('x-auth-token');
+        util.removeLocal('userInfo');
+        this.props.clearUserInfo();
+        message.success("注销成功");
     }
+
     render() {
-        const token = util.getLocal('x-auth-token');
         return (
             <React.Fragment>
                 <div className="grey_bg"></div>
@@ -73,14 +71,14 @@ class Header extends React.Component<any> {
                                 红色
                             </a>
                             {/* <!-- 未登录 -->*/}
-                            {this.state.a == 1 ? (
-                                <Dropdown overlay={menu}>
+                            {this.props.userInfo.user ? (
+                                <Dropdown overlay={menu({logout: this.logout})}>
                                     <a
                                         onClick={() => {
                                             Router.push("");
                                         }}
                                     >
-                                        13631550213<DownOutlined />
+                                        {this.props.userInfo.user.name || this.props.userInfo.user.telephone}<DownOutlined />
                                     </a>
                                 </Dropdown>
                             ) : (
@@ -115,4 +113,6 @@ class Header extends React.Component<any> {
 //     };
 // };
 
-export default connect(null, { changeColor })(Header);
+export default connect(state => ({
+    userInfo: state.userReducer.userInfo
+}), { changeColor, clearUserInfo })(Header);

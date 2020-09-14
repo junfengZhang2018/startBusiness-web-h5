@@ -1,12 +1,14 @@
 // 1.0 导入redux中的两个函数
 import { createStore, combineReducers } from "redux";
 
-// 2.0 准备相关的reducer当前只有一个testReducer
+// 2.0 准备相关的reducer
 import * as home from "./home/reducer";
+import * as user from "./user/reducer";
 
 // 3.0 利用redux中的combineReducers来编译成根reducer
 const rootReducer = combineReducers({
     ...home,
+    ...user,
 });
 
 // 4.0 调用 createStore创建好一个store对象

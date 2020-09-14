@@ -4,9 +4,11 @@ import api from "@/api";
 import util from "@/utils";
 import regexList from "@/utils/regexList";
 import Cookies from 'js-cookie'
+import { connect } from "react-redux";
+import { saveUserInfo } from "@/store/user/action";
 
-// 导入antd这个ui组件中的  Tabs, Icon,Form,, Input, Button
-import { Form, Input, Button, Tabs, Row, Col, message } from "antd";
+// 导入antd这个ui组件中的  Tabs, Icon,Form, Input, Button
+import { Form, Input, Button, Row, Col, message } from "antd";
 import {
     MobileOutlined,
     LockOutlined
@@ -15,34 +17,28 @@ import "./login.scss";
 
 const FormItem = Form.Item;
 
-// 将用户对象存储到sessionStroage中
-// import {setUser} from '../../kits/storageHelper.js'
-
-// 导入注册组件
-// import Register from '../../components/account/Register.js'
-
-class Login extends Component {
+class Login extends Component<any> {
     formRef = React.createRef<any>();
     // 负责执行登录请求的
     login(){
         this.formRef.current.validateFields().then(value => {
-            console.log("Received values of form: ", value);
-            // 将values数据通过post请求，发送给/nc/common/account/login
             api.login(value).then(res => {
                 util.setLocal('x-auth-token', res.token);
                 Cookies.set('token', res.token);
-                message.success('登录成功!', 1, () => {
-                    Router.push("/");
-                });
+                api.baseInfo().then(res => {
+                    this.props.saveUserInfo(res);
+                    util.setLocal('userInfo', res);
+                    message.success('登录成功!', 1, () => {
+                        Router.push("/");
+                    });
+                })
             });
         }).catch(err => {
             console.log(err)
         });
     }
 
-
     render() {
-        //3.0 布局整个登录页面的样式
         return (
             <div>
                 <Row>
@@ -128,4 +124,4 @@ class Login extends Component {
     }
 }
 
-export default Login;
+export default connect(null, { saveUserInfo })(Login);
