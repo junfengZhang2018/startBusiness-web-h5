@@ -4,6 +4,8 @@ import App from "next/app";
 import MyLayout from "../layouts/myLayout";
 import { instance } from "@/api/http"
 import Cookies from '@/utils/cookie'
+// 过滤器
+import "@/filters"
 // redux
 import { initStore } from "../store/index";
 import withRedux from "next-redux-wrapper";
@@ -55,6 +57,9 @@ class MyApp extends App<any> {
                             height: 100%;
                             >div{
                                 min-width: 1300px;
+                            }
+                            p{
+                                margin-bottom: 0;
                             }
                         }
                     `}

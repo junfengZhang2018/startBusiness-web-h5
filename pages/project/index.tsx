@@ -128,10 +128,6 @@ class Project extends Component<any> {
             { value: 7, label: "5000万-一亿" },
             { value: 8, label: "一亿以上" }
         ];
-        const filter = (arr, value) => {
-            let current = arr.find((item) => item.value === value);
-            return current?.label;
-        };
 
         return (
             <div className="project">
@@ -146,7 +142,6 @@ class Project extends Component<any> {
                         {projectList.map((item) => (
                             <li key={item.id}>
                                 <Link
-                                    as={`/project/detail/${item.id}`}
                                     href={`/project/detail?id=${item.id}`}
                                 >
                                     <a>{item.title}</a>
@@ -155,7 +150,7 @@ class Project extends Component<any> {
                                     <span>
                                         投资资金：
                                         <span className="hot">
-                                            {filter(amount, item.money) + "元"}
+                                            {this.investMoneyFilters(item.money) + "元"}
                                         </span>
                                     </span>
                                 </p>

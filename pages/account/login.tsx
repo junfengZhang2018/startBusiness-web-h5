@@ -28,9 +28,8 @@ class Login extends Component<any> {
                 api.baseInfo().then(res => {
                     this.props.saveUserInfo(res);
                     util.setLocal('userInfo', res);
-                    message.success('登录成功!', 1, () => {
-                        Router.push("/");
-                    });
+                    message.success('登录成功!', 1);
+                    Router.push("/");
                 })
             });
         }).catch(err => {

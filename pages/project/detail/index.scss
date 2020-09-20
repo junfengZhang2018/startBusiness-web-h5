@@ -1,0 +1,71 @@
+.detail{
+    background-color: #f2f2f2;
+    padding-top: 20px;
+    overflow: hidden;
+    .left{
+        width: 950px;
+        float: left;
+        >div{
+            background-color: #fff;
+            >div{
+                padding: 30px;
+            }
+            +div{
+                margin-top: 20px;
+            }
+            .title{
+                border-bottom: 1px solid #ccc;
+                >p{
+                    font-size: 20px;
+                    color: #1890ff;
+                }
+                .date{
+                    margin-left: 50px;
+                }
+            }
+        }
+        .intro{
+            
+            .introDetail{
+                p{
+                    >span{
+                        display: inline-block;
+                        width: 250px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+                }
+            }
+        }
+    }
+    .right{
+        float: right;
+        >div+div{
+            margin-top: 20px;
+        }
+        .title{
+            text-align: center;
+            height: 50px;
+            line-height: 50px;
+            font-size: 20px;
+        }
+        .content{
+            padding: 20px;
+        }
+        .memberProfile{
+            background-color: #00a4ff;
+            width: 300px;
+            color: #fff;
+            .title{
+                border-bottom: 1px solid #fff;
+            }
+        }
+        .recommand{
+            background-color: #fff;
+            .title{
+                border-bottom: 1px solid rgb(194, 3, 3);
+            }
+        }
+    }
+}
