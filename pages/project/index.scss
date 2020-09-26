@@ -6,9 +6,28 @@
         justify-content: flex-end;
         margin-bottom: 20px;
     }
-    .projectList{
+    .filter{
+        border: 1px solid #000;
+        height: 200px;
+        margin-bottom: 20px;
         background-color: #fff;
+        .title{
+            height: 40px;
+            line-height: 40px;
+            background-color: #ccc;
+            padding: 0 20px;
+        }
+        .condition{
+            padding: 10px 20px;
+            .ant-input-search{
+                width: 300px;
+            }
+        }
+    }
+    .projectList{
         li{
+            background-color: #fff;
+            width: 75%;
             padding: 15px;
             border-bottom: 1px solid #ccc;
             position: relative;
@@ -43,4 +62,11 @@
         justify-content: flex-end;
         padding-bottom: 20px;
     }
+}
+.half{
+    &+.half{
+        margin-left: 10%;
+    }
+    width: 45%;
+    display: inline-block;
 }
