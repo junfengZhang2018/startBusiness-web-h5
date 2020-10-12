@@ -9,26 +9,24 @@ export default class HotTags extends React.Component<any> {
         selectedTags: [],
     };
 
-    handleChange(tag, checked) {
-        // const { selectedTags } = this.state;
-        const nextSelectedTags = checked ? [tag] : [];
-        // console.log("You are interested in: ", nextSelectedTags);
+    handleChange(tag, checked, keyValue) {
+        const { selectedTags } = this.state;
+        const nextSelectedTags = checked ? [tag] : selectedTags.filter(t => t[keyValue.value] !== tag[keyValue.value]);
         this.setState({ selectedTags: nextSelectedTags });
-        console.log(this.state.selectedTags)
         this.props.onChange(nextSelectedTags);
     }
 
     render() {
         const { selectedTags } = this.state;
-        const { type, data, keyValue = {key: 'label', value: 'value'} } = this.props.data;
+        const { type, data, keyValue } = this.props.data;
         return (
-            <div>
+            <div className="wrap">
                 <span style={{ marginRight: 8 }}>{type}:</span>
                 {data.map((tag) => (
                     <CheckableTag
                         key={tag[keyValue.value]}
-                        checked={selectedTags.indexOf(tag) > -1}
-                        onChange={(checked) => this.handleChange(tag, checked)}
+                        checked={selectedTags.some(item => item[keyValue.value] === tag[keyValue.value])}
+                        onChange={(checked) => this.handleChange(tag, checked, keyValue)}
                     >
                         {tag[keyValue.key]}
                     </CheckableTag>

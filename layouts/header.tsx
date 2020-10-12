@@ -15,7 +15,7 @@ import Router from "next/router";
 const menu = (props) => (
     <Menu>
         <Menu.Item>
-            <p onClick={() => {props.logout()}} style={{textAlign: 'center'}}>注销</p>
+            <p onClick={() => {props.logout()}} style={{textAlign: 'center', marginBottom: 0}}>注销</p>
         </Menu.Item>
     </Menu>
 );

@@ -4,7 +4,7 @@ import Link from "next/link";
 import Router from "next/router";
 import api from "@/api";
 import "./index.scss";
-import { Form, Input, Radio, Pagination, Button, Modal, Cascader, message } from "antd";
+import { Form, Input, Radio, Pagination, Button, Modal, Cascader, message, Empty } from "antd";
 import { EyeOutlined, PlusOutlined } from "@ant-design/icons";
 import HotTags from '@component/hotTags'
 
@@ -13,6 +13,7 @@ const { Search } = Input;
 class Project extends Component<any> {
     constructor(props){
         super(props);
+        this.getList();
         this.getCity();
         this.getIndustry();
     }
@@ -20,10 +21,14 @@ class Project extends Component<any> {
     state = {
         loading: false,
         visible: false,
+        currentPage: 1,
+        pageSize: 10,
+        projectList: [],
+        pageInfo: {},
         cityList: [],
         industryList: [],
         selectedCondition: {
-            moneyIds: '',
+            moneyIds: [],
             cityId: '',
             industryId: ''
         }
@@ -33,10 +38,10 @@ class Project extends Component<any> {
     };
 
     submit = () => {
-        this.setState({ loading: true });
         this.formRef.current
             .validateFields()
             .then((value) => {
+                this.setState({ loading: true });
                 api.saveProject({
                     ...value,
                     cityId:
@@ -47,7 +52,7 @@ class Project extends Component<any> {
                     (res) => {
                         message.success("发布成功");
                         this.setState({ loading: false, visible: false });
-                        Router.push("/project");
+                        Router.reload();
                     },
                     (err) => {
                         this.setState({ loading: false });
@@ -61,6 +66,7 @@ class Project extends Component<any> {
 
     handleCancel = () => {
         this.setState({ visible: false });
+        this.formRef.current.resetFields();
     };
 
     getCity = () => {
@@ -102,33 +108,60 @@ class Project extends Component<any> {
 
     changeCondition = (item) => {
         return (state) => {
-            console.log(item.field, state[0].value)
-            this.setState({ selectedCondition: {...this.state.selectedCondition, [item.field]: state[0].value}})
-            console.log(this.state.selectedCondition)
+            this.setState({ selectedCondition: {...this.state.selectedCondition, [item.field]: state.map(val => val[item.keyValue.value])}});
         }
     }
 
-    static async getInitialProps(ctx) {
-        let { list, pageInfo }: any = await api.projectList({
+    search(content){
+        // console.log(this.state.selectedCondition)
+        // console.log(content)
+        this.setState({ currentPage: 1 });
+        this.getList({
+            moneyIds: this.state.selectedCondition.moneyIds,
+            industryId: this.state.selectedCondition.industryId[0],
+            cityId: this.state.selectedCondition.cityId[0],
+            content
+        })
+    }
+
+    getList = async (params?) => {
+        let data = {
             cityId: 0,
             content: "",
             industryId: 0,
             moneyIds: [],
             pageIndex: 1,
-            pageSize: 10,
+            pageSize: this.state.pageSize,
             type: 0,
-        });
-        return {
-            projectList: list,
-            pageInfo,
-        };
+            ...params
+        }
+        let { list, pageInfo }: any = await api.projectList(data);
+        this.setState({ projectList: list, pageInfo });
     }
+
+    onPageChange = (pageIndex, pageSize) => {
+        this.setState({ currentPage: pageIndex });
+        this.getList({
+            ...this.state.selectedCondition,
+            // content,
+            pageIndex
+        })
+    }
+
+    // static async getInitialProps(ctx) {
+    //     let { list, pageInfo }: any = await this.getList(!ctx.isServer&&ctx);
+    //     return {
+    //         projectList: list,
+    //         pageInfo,
+    //     };
+    // }
+
     componentWillMount() {
         // this.initForm();
     }
 
     render() {
-        const { pageInfo, projectList } = this.props.pageProps;
+        const { pageInfo, projectList } = this.state;
         const { visible, loading } = this.state;
         const { TextArea } = Input;
         const amount = [
@@ -146,9 +179,9 @@ class Project extends Component<any> {
             { value: 2, label: "公司" }
         ];
         const condition = [
-            {type: '投资金额', data: amount, field: 'moneyIds'},
-            {type: '投资城市', data: this.state.cityList, keyValue: {key: 'name', value: 'id'}},
-            {type: '投资行业', data: this.state.industryList, keyValue: {key: 'name', value: 'id'}},
+            {type: '投资金额', data: amount, field: 'moneyIds', keyValue: {key: 'label', value: 'value'}},
+            {type: '投资城市', data: this.state.cityList, field: 'cityId', keyValue: {key: 'name', value: 'id'}},
+            {type: '投资行业', data: this.state.industryList, field: 'industryId', keyValue: {key: 'name', value: 'id'}}
         ];
         const rules = {
             title: [
@@ -194,11 +227,12 @@ class Project extends Component<any> {
                                     <HotTags key={item.type} data={item} onChange={this.changeCondition(item)} />
                                 ))
                             }
-                            <Search placeholder="在当前条件下搜索" onSearch={value => console.log(this.state.selectedCondition)} enterButton />
+                            <Search placeholder="在当前条件下搜索" onSearch={value => this.search(value)} enterButton />
                         </div>
                     </div>
                     <ul className="projectList">
-                        {projectList.map((item) => (
+
+                        {projectList && projectList.length > 0 ? projectList.map((item) => (
                             <li key={item.id}>
                                 <Link
                                     href={`/project/detail?id=${item.id}`}
@@ -233,22 +267,19 @@ class Project extends Component<any> {
                                     <Button type="primary">投递</Button>
                                 </div>
                             </li>
-                        ))}
+                        )) : <Empty />}
                     </ul>
                     <div className="page">
-                        <Pagination
+                        {pageInfo.totalRec ? <Pagination
                             showQuickJumper
-                            onShowSizeChange={onShowSizeChange}
+                            current={this.state.currentPage}
+                            defaultCurrent={1}
+                            onChange={this.onPageChange}
                             total={pageInfo.totalRec}
-                        />
+                        /> : null}
                     </div>
                     {/* 弹窗 */}
-                    <Form
-                        ref={this.formRef}
-                        // onFinish={() => {
-                        //     this.login();
-                        // }}
-                    >
+                    <Form ref={this.formRef}>
                         <Modal
                             visible={visible}
                             title="项目发布"
@@ -341,8 +372,5 @@ class Project extends Component<any> {
     }
 }
 
-function onShowSizeChange(current, pageSize) {
-    console.log(current, pageSize);
-}
 
 export default Project;
