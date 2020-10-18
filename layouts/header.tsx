@@ -39,8 +39,10 @@ class Header extends React.Component<any> {
                     </a>
                     <div className="left fl">
                         <a href="/">首页</a>
-                        <a href="/project">找资金</a>
-                        <a href="">选项目</a>
+                        <a href="/business?type=1">找项目</a>
+                        <a href="/business?type=2">找资金</a>
+                        <a href="/business?type=3">找合伙人</a>
+                        <a href="/business?type=4">找加盟</a>
                     </div>
                     <div className="input fl">
                         <input
@@ -73,20 +75,12 @@ class Header extends React.Component<any> {
                             {/* <!-- 未登录 -->*/}
                             {this.props.userInfo.user ? (
                                 <Dropdown overlay={menu({logout: this.logout})}>
-                                    <a
-                                        onClick={() => {
-                                            Router.push("");
-                                        }}
-                                    >
+                                    <a href="/userCenter">
                                         {this.props.userInfo.user.name || this.props.userInfo.user.telephone}<DownOutlined />
                                     </a>
                                 </Dropdown>
                             ) : (
-                                <a
-                                    onClick={() => {
-                                        Router.push("/account/login");
-                                    }}
-                                >
+                                <a href="/account/login">
                                     登录
                                 </a>
                             )}

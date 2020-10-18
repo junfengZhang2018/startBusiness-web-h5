@@ -7,7 +7,7 @@ import { EyeOutlined } from "@ant-design/icons";
 
 class ProjectDetail extends Component<any> {
     static async getInitialProps(ctx){
-        console.log(ctx)
+        // console.log(ctx)
         let projectDetail = await api.projectDetail({id: ctx.query.id});
         return {
             projectDetail
@@ -32,8 +32,8 @@ class ProjectDetail extends Component<any> {
                             </div>
                             <div className="introDetail">
                                 <p>
-                                    <span>投资资金：{this.investMoneyFilters(projectDetail.money) + "元"}</span>
-                                    <span>投资期限：{projectDetail.timeLimit}</span>
+                                    {projectDetail.money ? <span>投资资金：{this.investMoneyFilters(projectDetail.money) + "元"}</span>:''}
+                                    {projectDetail.timeLimit && <span>投资期限：{projectDetail.timeLimit}</span>}
                                 </p>
                                 <p>
                                     {projectDetail.cityName?<span>投资地区：{projectDetail.cityName}</span>:''}
@@ -47,11 +47,11 @@ class ProjectDetail extends Component<any> {
                                     <span>投资意向项目阶段：{this.phaseFilters(projectDetail.phase)}</span>
                                     <span>可提供信息：{projectDetail.stake}</span>
                                 </p>
-                                <p>
+                                {/* <p>
                                     <span className="content">
                                         投资内容：{projectDetail.content}
                                     </span>
-                                </p>
+                                </p> */}
                             </div>
                         </div>
                         <div className="summarize">
@@ -59,7 +59,7 @@ class ProjectDetail extends Component<any> {
                                 <p>投资需求</p>
                             </div>
                             <div>
-                                {projectDetail.need}
+                                {projectDetail.content}
                             </div>
                         </div>
                     </div>

@@ -1,16 +1,14 @@
 // 全局布局组件
 import React, { Component } from "react";
 import Link from "next/link";
-import Router from "next/router";
+import Router, { withRouter } from "next/router";
 import api from "@/api";
 import "./index.scss";
 import { Form, Input, Radio, Pagination, Button, Modal, Cascader, message, Empty } from "antd";
 import { EyeOutlined, PlusOutlined } from "@ant-design/icons";
 import HotTags from '@component/hotTags'
 
-const FormItem = Form.Item;
-const { Search } = Input;
-class Project extends Component<any> {
+class Business extends Component<any> {
     constructor(props){
         super(props);
         this.getList();
@@ -41,9 +39,11 @@ class Project extends Component<any> {
         this.formRef.current
             .validateFields()
             .then((value) => {
+                const { type = 1 } = this.props.router.query;
                 this.setState({ loading: true });
                 api.saveProject({
                     ...value,
+                    type,
                     cityId:
                         value.cityId?.[value.cityId.length - 1],
                     industryId:
@@ -125,6 +125,7 @@ class Project extends Component<any> {
     }
 
     getList = async (params?) => {
+        const { type = 1 } = this.props.router.query;
         let data = {
             cityId: 0,
             content: "",
@@ -132,7 +133,7 @@ class Project extends Component<any> {
             moneyIds: [],
             pageIndex: 1,
             pageSize: this.state.pageSize,
-            type: 0,
+            type,
             ...params
         }
         let { list, pageInfo }: any = await api.projectList(data);
@@ -161,9 +162,13 @@ class Project extends Component<any> {
     }
 
     render() {
+        const { type = 1 } = this.props.router.query;
         const { pageInfo, projectList } = this.state;
         const { visible, loading } = this.state;
         const { TextArea } = Input;
+        const FormItem = Form.Item;
+        const { Search } = Input;
+        const contentMap = ['资金需求', '项目详情', '项目详情', '加盟需求'];
         const amount = [
             { value: 1, label: "1-50万" },
             { value: 2, label: "50-100万" },
@@ -205,48 +210,52 @@ class Project extends Component<any> {
             content: [
                 {
                     required: true,
-                    message: "请输入项目详情!",
+                    message: `请输入${contentMap[type-1]}!`,
                 }
-            ]
+            ],
+            advantage: [
+                {
+                    required: true,
+                    message: "请输入您的优势!",
+                }
+            ],
         };
-
+        
         return (
             <div className="project">
                 <div className="w">
                     <div className="publish">
                         <Button type="primary" onClick={this.showModal}>
                             <PlusOutlined />
-                            项目发布
+                            需求发布
                         </Button>
                     </div>
                     <div className="filter">
                         <div className="title">筛选</div>
                         <div className="condition">
                             {
-                                condition.map(item => (
-                                    <HotTags key={item.type} data={item} onChange={this.changeCondition(item)} />
-                                ))
+                                condition.map((item, index) => {
+                                    if((type == 3 || type == 4) && !index) return;
+                                    else return (
+                                        <HotTags key={item.type} data={item} onChange={this.changeCondition(item)} />
+                                    )
+                                })
                             }
                             <Search placeholder="在当前条件下搜索" onSearch={value => this.search(value)} enterButton />
                         </div>
                     </div>
                     <ul className="projectList">
-
                         {projectList && projectList.length > 0 ? projectList.map((item) => (
                             <li key={item.id}>
-                                <Link
-                                    href={`/project/detail?id=${item.id}`}
-                                >
-                                    <a>{item.title}</a>
-                                </Link>
-                                <p>
+                                <a href={`/business/detail?id=${item.id}`}>{item.title}</a>
+                                {(type == 1 || type == 2) && <p>
                                     <span>
                                         投资资金：
                                         <span className="hot">
                                             {this.investMoneyFilters(item.money) + "元"}
                                         </span>
                                     </span>
-                                </p>
+                                </p>}
                                 <p>
                                     {item.cityName && <span>投资地区：{item.cityName}</span>}
                                     {item.industryName && <span>投资行业：{item.industryName}</span>}
@@ -282,7 +291,7 @@ class Project extends Component<any> {
                     <Form ref={this.formRef}>
                         <Modal
                             visible={visible}
-                            title="项目发布"
+                            title="需求发布"
                             width="40%"
                             onOk={this.submit}
                             onCancel={this.handleCancel}
@@ -301,11 +310,11 @@ class Project extends Component<any> {
                             ]}
                         >
                             <FormItem
-                                label="合作标题"
+                                label="标题"
                                 name="title"
                                 rules={rules.title}
                             >
-                                <Input placeholder="请输入合作标题" />
+                                <Input placeholder="请输入标题" />
                             </FormItem>
                             <FormItem
                                 label="项目类型"
@@ -338,7 +347,7 @@ class Project extends Component<any> {
                                     changeOnSelect
                                 />
                             </FormItem>
-                            <FormItem
+                            {(type == 1 || type == 2) && <FormItem
                                 label="投资金额"
                                 name="money"
                                 rules={rules.money}
@@ -353,17 +362,27 @@ class Project extends Component<any> {
                                         </Radio>
                                     ))}
                                 </Radio.Group>
-                            </FormItem>
+                            </FormItem>}
                             <FormItem
-                                label="项目详情"
+                                label={contentMap[type-1]}
                                 name="content"
                                 rules={rules.content}
                             >
                                 <TextArea
                                     rows={3}
-                                    placeholder="请输入项目详情"
+                                    placeholder={`请输入${contentMap[type-1]}`}
                                 />
                             </FormItem>
+                            {type == 3 && <FormItem
+                                label="您的优势"
+                                name="advantage"
+                                rules={rules.advantage}
+                            >
+                                <TextArea
+                                    rows={3}
+                                    placeholder="请输入您的优势"
+                                />
+                            </FormItem>}
                         </Modal>
                     </Form>
                 </div>
@@ -373,4 +392,4 @@ class Project extends Component<any> {
 }
 
 
-export default Project;
+export default withRouter(Business);

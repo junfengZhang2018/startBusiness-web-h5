@@ -29,7 +29,7 @@ class Login extends Component<any> {
                     this.props.saveUserInfo(res);
                     util.setLocal('userInfo', res);
                     message.success('登录成功!', 1);
-                    Router.push("/");
+                    location.replace("/");
                 })
             });
         }).catch(err => {
