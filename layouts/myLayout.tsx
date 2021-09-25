@@ -1,6 +1,7 @@
 import React from 'react'
 import Header from './header'
 import { BackTop } from 'antd';
+import Footer from './footer';
 
 export default class myLayout extends React.Component<any> {
     render() {
@@ -13,6 +14,7 @@ export default class myLayout extends React.Component<any> {
                 <Header></Header>
                 {/* 2.0 根据不同请求产生这个请求对应组件中的内容 */}
                 <Component {...pageProps} />
+                <Footer></Footer>
                 <BackTop />
             </div>
         )

@@ -4,6 +4,7 @@ import Link from "next/link";
 import api from "@/api";
 import "./index.scss";
 import { EyeOutlined } from "@ant-design/icons";
+import { investMoneyFilters, projectTypeFilters, phaseFilters } from '@/filters'
 
 class ProjectDetail extends Component<any> {
     static async getInitialProps(ctx){
@@ -32,7 +33,7 @@ class ProjectDetail extends Component<any> {
                             </div>
                             <div className="introDetail">
                                 <p>
-                                    {projectDetail.money ? <span>投资资金：{this.investMoneyFilters(projectDetail.money) + "元"}</span>:''}
+                                    {projectDetail.money ? <span>投资资金：{investMoneyFilters(projectDetail.money) + "元"}</span>:''}
                                     {projectDetail.timeLimit && <span>投资期限：{projectDetail.timeLimit}</span>}
                                 </p>
                                 <p>
@@ -40,11 +41,11 @@ class ProjectDetail extends Component<any> {
                                     {projectDetail.industryName?<span>投资行业：{projectDetail.industryName}</span>:''}
                                 </p>
                                 <p>
-                                    <span>项目类型：{this.projectTypeFilters(projectDetail.projectType)}</span>
+                                    <span>项目类型：{projectTypeFilters(projectDetail.projectType)}</span>
                                     <span>股份比例：{projectDetail.stake}</span>
                                 </p>
                                 <p>
-                                    <span>投资意向项目阶段：{this.phaseFilters(projectDetail.phase)}</span>
+                                    <span>投资意向项目阶段：{phaseFilters(projectDetail.phase)}</span>
                                     <span>可提供信息：{projectDetail.stake}</span>
                                 </p>
                                 {/* <p>

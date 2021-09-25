@@ -20,9 +20,9 @@ const FormItem = Form.Item;
 class Login extends Component<any> {
     formRef = React.createRef<any>();
     // 负责执行登录请求的
-    login(){
+    login() {
         this.formRef.current.validateFields().then(value => {
-            api.login(value).then(res => {
+            api.login(value).then((res: any) => {
                 util.setLocal('x-auth-token', res.token);
                 Cookies.set('token', res.token);
                 api.baseInfo().then(res => {
@@ -33,49 +33,58 @@ class Login extends Component<any> {
                 })
             });
         }).catch(err => {
-            console.log(err)
+            console.log(err);
         });
+    }
+
+    sendCode() {
+        
     }
 
     render() {
         return (
-            <div>
-                <Row>
-                    <Col span="10" offset="9">
-                        <Form
-                            ref={this.formRef}
-                            onFinish={() => {this.login()}}
-                            className="login_form"
+            <div className="content w">
+                <div className="loginBanner">
+                    <img className="w" src="/img/loginBanner.jpg" alt="" />
+                </div>
+                <p className="nav">登录</p>
+                <div className="form">
+                    <Form
+                        ref={this.formRef}
+                        onFinish={() => {this.login()}}
+                        className="login_form"
+                    >
+                        <FormItem
+                            name="telephone"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "请输入手机号!",
+                                },
+                                {
+                                    pattern: regexList.get('mobile'),
+                                    message:
+                                        "用户名必须符合手机格式!",
+                                },
+                            ]}
                         >
-                            <FormItem
-                                name="telephone"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: "请输入手机号!",
-                                    },
-                                    {
-                                        pattern: regexList.get('mobile'),
-                                        message:
-                                            "用户名必须符合手机格式!",
-                                    },
-                                ]}
-                            >
-                                <Input
-                                    maxLength={11}
-                                    prefix={
-                                        <MobileOutlined
-                                            style={{
-                                                color:
-                                                    "rgba(0,0,0,.25)",
-                                            }}
-                                        />
-                                    }
-                                    placeholder="请输入手机号"
-                                />
-                            </FormItem>
+                            <Input
+                                maxLength={11}
+                                prefix={
+                                    <MobileOutlined
+                                        style={{
+                                            color:
+                                                "rgba(0,0,0,.25)",
+                                        }}
+                                    />
+                                }
+                                placeholder="请输入手机号"
+                            />
+                        </FormItem>
+                        <div className="row">
                             <FormItem
                                 name="code"
+                                className="code"
                                 rules={[
                                     {
                                         required: true,
@@ -96,18 +105,20 @@ class Login extends Component<any> {
                                     placeholder="请输入验证码"
                                 />
                             </FormItem>
-                            <FormItem>
-                                <Button
-                                    type="primary"
-                                    htmlType="submit"
-                                    className="login-form-button"
-                                >
-                                    登录
-                                </Button>
-                            </FormItem>
-                        </Form>
-                    </Col>
-                </Row>
+                            <a onClick={() => {this.sendCode()}}>发送验证码</a>
+                        </div>
+                        <FormItem>
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                className="login-form-button"
+                            >
+                                登录
+                            </Button>
+                        </FormItem>
+                    </Form>
+                </div>
+                
                 <style>
                     {`
                         .ant-form-item{

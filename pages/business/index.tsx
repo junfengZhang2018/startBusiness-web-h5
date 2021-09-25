@@ -7,6 +7,7 @@ import "./index.scss";
 import { Form, Input, Radio, Pagination, Button, Modal, Cascader, message, Empty } from "antd";
 import { EyeOutlined, PlusOutlined } from "@ant-design/icons";
 import HotTags from '@component/hotTags'
+import { investMoneyFilters } from '@/filters'
 
 class Business extends Component<any> {
     constructor(props){
@@ -70,7 +71,7 @@ class Business extends Component<any> {
     };
 
     getCity = () => {
-        api.getCity({ pid: 0 }).then(res => {
+        api.getCity({ pid: 0 }).then((res: any) => {
             this.setState({
                 cityList: res.list.map((item) => {
                     return {
@@ -83,7 +84,7 @@ class Business extends Component<any> {
     };
 
     getIndustry = () => {
-        api.getIndustry({ pid: 0 }).then(res => {
+        api.getIndustry({ pid: 0 }).then((res: any) => {
             this.setState({ industryList: res.list });
         });
     };
@@ -99,7 +100,7 @@ class Business extends Component<any> {
     loadData = (selectedOptions) => {
         const targetOption = selectedOptions[selectedOptions.length - 1];
         targetOption.loading = true;
-        api.getCity({ pid: targetOption.id }).then((res) => {
+        api.getCity({ pid: targetOption.id }).then((res: any) => {
             targetOption.loading = false;
             targetOption.children = res.list;
             this.setState({ cityList: [...this.state.cityList] });
@@ -163,7 +164,7 @@ class Business extends Component<any> {
 
     render() {
         const { type = 1 } = this.props.router.query;
-        const { pageInfo, projectList } = this.state;
+        const { pageInfo, projectList }: any = this.state;
         const { visible, loading } = this.state;
         const { TextArea } = Input;
         const FormItem = Form.Item;
@@ -252,7 +253,7 @@ class Business extends Component<any> {
                                     <span>
                                         投资资金：
                                         <span className="hot">
-                                            {this.investMoneyFilters(item.money) + "元"}
+                                            {investMoneyFilters(item.money) + "元"}
                                         </span>
                                     </span>
                                 </p>}

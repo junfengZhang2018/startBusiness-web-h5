@@ -1,0 +1,73 @@
+.wrapper {
+    background-color: #fff;
+    // footer公共样式
+    #footer {
+        width: 100%;
+        overflow: hidden;
+        margin-top: 32px;
+        background-color: #fff;
+        border-top: 1px solid #eeeeee;
+        .contactWay {
+            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            padding: 36px 0;
+            > div {
+                flex: 1;
+            }
+            .title {
+                font-size: 16px;
+                margin: 0 0 8px;
+                color: #586c94;
+                font-weight: bold;
+            }
+            .info-wrap {
+                margin-bottom: 12px;
+                line-height: 24px;
+                p {
+                    font-size: 14px;
+                }
+            }
+            .weChat {
+                text-align: center;
+                img {
+                    width: 128px;
+                    height: 128px;
+                }
+            }
+            .partner {
+                text-align: right;
+                img {
+                    width: 320px;
+                    height: 132px;
+                }
+            }
+        }
+        .copyright {
+            border-top: 1px solid #eee;
+            
+            font-size: 14px;
+            .footer-info {
+                padding: 24px 0;
+                display: flex;
+                justify-content: space-between;
+            }
+            .footer-links {
+                ul {
+                    display: flex;
+                }
+                li {
+                    margin-left: 15px;
+                    cursor: pointer;
+                    a {
+                        color: #999;
+                        &:hover {
+                            text-decoration: underline;
+                            color: #000;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

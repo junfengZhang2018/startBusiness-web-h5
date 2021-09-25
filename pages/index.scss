@@ -1,9 +1,10 @@
 .index{
-	background-color: #f2f2f2;
+	// background-color: #f2f2f2;
 	padding-bottom: 30px;
 	.summary{
 		height: 130px;
 		background-color: #ccc;
+		margin-top: 30px;
 	}
 	.home-module-1{
 		margin: 30px auto;
@@ -13,10 +14,12 @@
 			height: 436px;
 			width: 386px;
 			background-color: #fff;
-			&:first-child{
-				width: 268px;
-			}
 		}
+	}
+	.carousel {
+		min-width: 1300px;
+		width: 99vw;
+		margin: 0 auto;
 	}
 }
 

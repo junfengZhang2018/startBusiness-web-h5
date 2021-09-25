@@ -244,6 +244,11 @@ legend {
     outline: 0;
 }
 
+html {
+    display: table;
+    width: 100%;
+}
+
 body {
     background: #fff;
 }

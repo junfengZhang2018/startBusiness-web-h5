@@ -33,63 +33,65 @@ class Header extends React.Component<any> {
         return (
             <React.Fragment>
                 <div className="grey_bg"></div>
-                <header className="headtop w">
-                    <a href="" className="fl">
-                        <img src="/img/asset-logoIco.png" alt="" />
-                    </a>
-                    <div className="left fl">
-                        <a href="/">首页</a>
-                        <a href="/business?type=1">找项目</a>
-                        <a href="/business?type=2">找资金</a>
-                        <a href="/business?type=3">找合伙人</a>
-                        <a href="/business?type=4">找加盟</a>
-                    </div>
-                    <div className="input fl">
-                        <input
-                            type="text"
-                            className="fl"
-                            placeholder="输入查询关键字"
-                        />
-                        <button className="search">搜索</button>
-                    </div>
-                    <div className="right fr">
-                        <div className="signin">
-                            <Badge count={5}>
-                                {/* 加入antd中的购物车图标 */}
-                                <ShoppingCartOutlined />
-                            </Badge>
-                            <a
-                                onClick={() => {
-                                    this.props.changeColor("blue");
-                                }}
-                            >
-                                蓝色
-                            </a>
-                            <a
-                                onClick={() => {
-                                    this.props.changeColor("red");
-                                }}
-                            >
-                                红色
-                            </a>
-                            {/* <!-- 未登录 -->*/}
-                            {this.props.userInfo.user ? (
-                                <Dropdown overlay={menu({logout: this.logout})}>
-                                    <a href="/userCenter">
-                                        {this.props.userInfo.user.name || this.props.userInfo.user.telephone}<DownOutlined />
-                                    </a>
-                                </Dropdown>
-                            ) : (
-                                <a href="/account/login">
-                                    登录
+                <header className="headtop">
+                    <div className="w">
+                        <a href="" className="fl">
+                            <img src="/img/asset-logoIco.png" alt="" />
+                        </a>
+                        <div className="left fl">
+                            <a href="/">首页</a>
+                            <a href="/business?type=1">找项目</a>
+                            <a href="/business?type=2">找资金</a>
+                            <a href="/business?type=3">找合伙人</a>
+                            <a href="/business?type=4">找加盟</a>
+                        </div>
+                        <div className="input fl">
+                            <input
+                                type="text"
+                                className="fl"
+                                placeholder="输入查询关键字"
+                            />
+                            <button className="search">搜索</button>
+                        </div>
+                        <div className="right fr">
+                            <div className="signin">
+                                <Badge count={5}>
+                                    {/* 加入antd中的购物车图标 */}
+                                    <ShoppingCartOutlined />
+                                </Badge>
+                                <a
+                                    onClick={() => {
+                                        this.props.changeColor("blue");
+                                    }}
+                                >
+                                    蓝色
                                 </a>
-                            )}
-
-                            {/* <span> |</span>{" "}
-                            <a href="#"> 注册</a> */}
-                            {/* <!-- 登录 --> */}
-                            {/* <a href="#" ><Icon type="bell" theme="twoTone" />个人中心</a>
-                            <a href="#" ><img src="/static/img/asset-myImg.jpg" alt="" />18665765432</a> */}
+                                <a
+                                    onClick={() => {
+                                        this.props.changeColor("red");
+                                    }}
+                                >
+                                    红色
+                                </a>
+                                {/* <!-- 未登录 -->*/}
+                                {this.props.userInfo.user ? (
+                                    <Dropdown overlay={menu({logout: this.logout})}>
+                                        <a href="/userCenter">
+                                            {this.props.userInfo.user.name || this.props.userInfo.user.telephone}<DownOutlined />
+                                        </a>
+                                    </Dropdown>
+                                ) : (
+                                    <a href="/account/login">
+                                        登录
+                                    </a>
+                                )}
+    
+                                {/* <span> |</span>{" "}
+                                <a href="#"> 注册</a> */}
+                                {/* <!-- 登录 --> */}
+                                {/* <a href="#" ><Icon type="bell" theme="twoTone" />个人中心</a>
+                                <a href="#" ><img src="/static/img/asset-myImg.jpg" alt="" />18665765432</a> */}
+                            </div>
                         </div>
                     </div>
                 </header>

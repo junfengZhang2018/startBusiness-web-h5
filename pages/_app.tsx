@@ -17,6 +17,7 @@ import zhCN from 'antd/lib/locale/zh_CN';
 // style
 import "antd/dist/antd.css";
 import util from "@/utils";
+import Head from "next/head";
 
 class MyApp extends App<any> {
     // 获取到子组件中的prpos对象
@@ -24,9 +25,9 @@ class MyApp extends App<any> {
         let pageProps = {};
         // 从cookie里获得token并加在头部
         instance.interceptors.request.use(config => {
-            if(ctx.isServer){
+            if (ctx.isServer) {
                 config.headers['x-auth-token'] = Cookies.getcookiesInServer(ctx.req).token || '';
-            }else{
+            } else {
                 config.headers['x-auth-token'] = Cookies.getcookiesInClient('token') || '';
             }
             return config;
@@ -34,9 +35,9 @@ class MyApp extends App<any> {
             console.log(error); // for debug
         })
         if (Component.getInitialProps) {
-            try{
+            try {
                 pageProps = await Component.getInitialProps(ctx);
-            }catch(err){
+            } catch(err) {
                 ctx.res.end(err);
             }
         }
@@ -44,17 +45,21 @@ class MyApp extends App<any> {
         return { pageProps };
     }
     componentDidMount(){
-        if(util.getLocal('userInfo')) this.props.store.dispatch(saveUserInfo(util.getLocal('userInfo')));
+        if (util.getLocal('userInfo')) {
+            this.props.store.dispatch(saveUserInfo(util.getLocal('userInfo')));
+        }
     }
     render() {
         const { Component, store, ...pageProps } = this.props;
 
         return (
+            
             <React.Fragment>
                 <style jsx global>
                     {`
                         #__next {
-                            height: 100%;
+                            min-height: 100%;
+                            background-color: #f2f2f2;
                             >div{
                                 min-width: 1300px;
                             }

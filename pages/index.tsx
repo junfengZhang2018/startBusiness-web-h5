@@ -69,17 +69,20 @@ class Home extends Component<any> {
                         ))
                     }
                 </ul> */}
-                <Carousel autoplay>
-                    <div>
-                        <h3>1</h3>
-                    </div>
-                    <div>
-                        <h3>2</h3>
-                    </div>
-                    <div>
-                        <h3>3</h3>
-                    </div>
-                </Carousel>
+                <div className="carousel">
+                    <Carousel autoplay>
+                        <div>
+                            <img src="/img/banner1.jpg" alt="" />
+                        </div>
+                        <div>
+                            <img src="/img/banner2.jpg" alt="" />
+                        </div>
+                        <div>
+                            <img src="/img/banner3.jpg" alt="" />
+                        </div>
+                    </Carousel>
+                </div>
+                
                 <div className="summary" style={{color: this.props.color}}>1.资金方 2.项目方</div>
 
                 <div className="w">

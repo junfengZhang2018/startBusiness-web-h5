@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import config from "@/config/url";
 import { message } from "antd";
 import Loading from "@component/loading";
@@ -35,13 +35,13 @@ export const http = (url: string, data: object, loading: boolean) => {
             url,
             data,
             headers: { "Content-Type": "application/json;charset=UTF-8" },
-            validateStatus: (status) => {
+            validateStatus: (status: number) => {
                 return status >= 200 && status < 300;
             },
         };
         ifClient && (_option.headers['x-auth-token'] = util.getLocal('x-auth-token'));
         instance
-            .request(_option)
+            .request(_option as AxiosRequestConfig)
             .then(
                 (res) => {
                     const Data = res.data;
